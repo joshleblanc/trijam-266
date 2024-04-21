@@ -1,0 +1,15 @@
+{
+  "platforms": [
+
+  ],
+  "version": "5.22",
+  "image_index": false,
+  "manifest": true,
+  "bundle_compile": true,
+  "font_index": true,
+  "gems": {
+  },
+  "manifest_digest": "3b070e51d0857665c966e1c985ec061c",
+  "font_digest": "48f59f2d2a1175c8266ec4c3b813a438",
+  "bundle_digest": "99914b932bd37a50b983c5e7c90ae93b"
+}
