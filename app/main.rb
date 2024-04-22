@@ -31,7 +31,7 @@ component :max_height, { y: 0 }
 component :parts, { parts: [] }
 component :time, { left: 10 }
 
-entity :player, :position, :gravity, :size, :max_height, :accel, sprite: { tile_x: 175, tile_y: 0 }
+entity :player, :position, :on_ground, :gravity, :size, :max_height, :accel, sprite: { tile_x: 175, tile_y: 0 }
 entity :floor, :position, :floor, :size, sprite: { tile_x: 160, tile_y: 80 * 4 }
 
 entity :platform_part, :position, :platform, :size, :parent, sprite: { tile_x: 160, tile_y: 80 * 4 }
@@ -252,7 +252,7 @@ end
 system :gravity do |entities| 
   platforms = state.entities.select { has_components?(_1, :platform) || has_components?(_1, :floor) }
 
-  next_pos = { x: state.player.position.x, y: state.player.position.y - SIZE - state.player.accel.y, w: SIZE, h: SIZE }
+  next_pos = { x: state.player.position.x, y: state.player.position.y - SIZE, w: SIZE, h: SIZE }
     
   on_ground = platforms.find do 
     rect = make_rect(_1)
@@ -263,7 +263,6 @@ system :gravity do |entities|
   end
 
   on_ground = make_rect(on_ground) if on_ground
-
   if on_ground && state.player.accel.y < 0
     state.player.accel.y = 0
     state.player.position.y = on_ground.y + SIZE
@@ -273,11 +272,11 @@ system :gravity do |entities|
 
     add_component(state.player, :on_ground)
 
-    prev = state.player.max_height.y
-  else
+  elsif !on_ground
     state.player.accel.y -= 0.98
   end
 
+  
   state.player.max_height.y = [state.player.position.y, state.player.max_height.y].max
 end
 
