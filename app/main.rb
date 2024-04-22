@@ -276,13 +276,11 @@ system :gravity do |entities|
     state.player.position.y = on_ground.y + SIZE
     
     outputs.sounds << "sounds/footstep_carpet_00#{rand.remap(0, 1, 0, 4).to_i}.ogg" unless has_components?(state.player, :on_ground)
+    state.timer.time.left = 10 unless has_components?(state.player, :on_ground)
 
     add_component(state.player, :on_ground)
 
     prev = state.player.max_height.y
-
-
-    state.timer.time.left = 10 unless has_components?(state.player, :on_ground)
   else
     state.player.accel.y -= 0.98
   end
