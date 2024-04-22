@@ -1,6 +1,6 @@
 {
   "platforms": [
-
+    "html5"
   ],
   "version": "5.22",
   "image_index": false,
