@@ -8,7 +8,7 @@ SIZE = 64
 
 world :default, 
   systems: [
-    :tick_timer, :gravity, :controls, :acceleration, :manage_platforms, :render_equations, :render_sprites, :render_score, :render_timer,
+    :tick_timer, :on_ground, :gravity, :controls, :acceleration, :manage_platforms, :render_equations, :render_sprites, :render_score, :render_timer,
   ], 
   entities: [
     { timer: { as: :timer }},
@@ -249,6 +249,20 @@ system :render_equations, :equation do |entities|
   end
 end
 
+system :on_ground do
+  platforms = state.entities.select { has_components?(_1, :platform) || has_components?(_1, :floor) }
+  next_pos = { x: state.player.position.x, y: state.player.position.y - SIZE, w: SIZE, h: SIZE }
+  on_ground = platforms.find do 
+    rect = make_rect(_1)
+    has_intersection = rect.intersect_rect?(next_pos)
+    is_odd = has_intersection && _1.parent&.parent&.equation&.answer&.odd?
+
+    has_intersection && (is_odd || !_1.parent)
+  end
+
+  remove_component(state.player, :on_ground) unless on_ground
+end
+
 system :gravity do |entities| 
   platforms = state.entities.select { has_components?(_1, :platform) || has_components?(_1, :floor) }
 
@@ -272,7 +286,7 @@ system :gravity do |entities|
 
     add_component(state.player, :on_ground)
 
-  elsif !on_ground
+  elsif !has_components?(state.player, :on_ground)
     state.player.accel.y -= 0.98
   end
 
