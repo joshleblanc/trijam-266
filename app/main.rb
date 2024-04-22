@@ -176,16 +176,9 @@ system :manage_platforms, :platform do |entities|
 
   max_rendered = (state.player.max_height.y / step).ceil
 
-  if max_rendered > 0 
-    num_platforms = num_platforms - 5
-  end
-
   if max_rendered >= num_platforms
-    10.times do |i|
-      y = max_rendered + i
-      if num_platforms > 0
-        y = y + 5
-      end
+    3.times do |i|
+      y = num_platforms + i + 1
       odd_even = [:odd, :even].shuffle
       make_platform(:left, step * y, odd_even.first)
       make_platform(:right, step * y, odd_even.second)
