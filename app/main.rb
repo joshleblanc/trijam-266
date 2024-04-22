@@ -266,7 +266,7 @@ end
 system :gravity do |entities| 
   platforms = state.entities.select { has_components?(_1, :platform) || has_components?(_1, :floor) }
 
-  next_pos = { x: state.player.position.x, y: state.player.position.y - SIZE, w: SIZE, h: SIZE }
+  next_pos = { x: state.player.position.x, y: state.player.position.y - 1, w: SIZE, h: SIZE }
     
   on_ground = platforms.find do 
     rect = make_rect(_1)
